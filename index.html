@@ -72,7 +72,7 @@ html:not(.has-touch) .mobile{display:none}
 <button class="link" id="authSwitch" type="button">Аккаунтың жоқ па? Тіркел</button>
 <p class="note" id="authNote"></p></div>
 <div class="card" id="coopCard" style="display:none"><h1>👥 Бірге ойнау</h1><p class="keep">Менің ID: <b id="myId">—</b> · бөлмеде ең көбі 4 ойыншы</p>
-<div class="row"><button class="btn" id="hostBtn">Бөлме ашу</button></div><p class="keep">📱💻 Телефоннан да, ноутбуктан да қосылуға болады. Бөлме ашқан соң жоғарғы 🔗 батырмасымен достарыңа шақыру сілтемесін жібер: ол ID-ді өзі толтырады. Әр адам өз құрылғысында өз экранын, өз камерасын көреді.</p><p class="keep">Бөлме ашсаң, достарың сенің ID-ің арқылы қосылады және сенің деңгейіңде бірге ойнайды.</p>
+<div class="row"><button class="btn" id="hostBtn">Бөлме ашу</button></div><p class="keep">ID-ді өзі толтырады.</p><p class="keep">Бірге ойнайды.</p>
 <label class="field">Досыңның ID нөмірі<input type="text" id="joinId" inputmode="numeric" maxlength="5" autocomplete="off"></label><button class="btn alt" id="joinBtn">Қосылу</button>
 <p class="err" id="coopErr" role="alert"></p><button class="btn alt sm" id="coopBack">Артқа</button>
 <p class="note" id="coopWarn" style="display:none">⚠ Ғаламдық ID тіркелімі қосылмаған: ID тек осы құрылғыда берілді және басқа құрылғылармен қайталануы мүмкін. README-дегі Supabase қадамдарын орында.</p></div>
@@ -470,7 +470,7 @@ const root=document.documentElement,coarse=matchMedia('(pointer:coarse)').matche
 if(coarse)root.classList.add('has-touch');addEventListener('touchstart',()=>root.classList.add('has-touch'),{once:true,passive:true});
 if(!root.requestFullscreen)$('#fsBtn').style.display='none';
 if(/iPhone|iPad|iPod/.test(navigator.userAgent)&&!navigator.standalone)$('#iosTip').style.display='';
-showOv('Dastan2026','100 деңгейлік шытырман оқиға! Тиын мен оқ жинап, жауларды жеңіп, әр 10-деңгейдегі бастықты жық.','menu');makeLevel();draw();
+showOv('Dastan2026','100 деңгейлік шытырман оқиға! Тиын мен оқ жинап, жауларды жеңіп, әр 10-деңгейдегі бастықты жең.','menu');makeLevel();draw();
 const fe=$('#faceEd'),fc=$('#faceCv'),fg=fc.getContext('2d');let fcol='#2b2b2b',fsize=5,ferase=false,fdraw=false,fprev=null;
 const fpos=e=>{const r=fc.getBoundingClientRect();return[(e.clientX-r.left)*128/r.width,(e.clientY-r.top)*128/r.height]};
 function stroke(a,b){fg.globalCompositeOperation=ferase?'destination-out':'source-over';fg.strokeStyle=fcol;fg.lineWidth=fsize;fg.lineCap=fg.lineJoin='round';fg.beginPath();fg.moveTo(a[0],a[1]);fg.lineTo(b[0]+.01,b[1]);fg.stroke()}
@@ -566,7 +566,7 @@ async function joinRoom(){const err=$('#coopErr');err.textContent='';const id=pa
  try{await loadPeer()}catch(e){err.textContent='PeerJS жүктелмеді. Интернетті тексер.';return}
  let done=false;const peer=new globalThis.Peer();net.peer=peer;
  const fail=t=>{if(done)return;done=true;err.textContent=t;try{peer.destroy()}catch(x){}net.peer=null};
- setTimeout(()=>fail('Қосылу уақыты бітті. ID дұрыс па, бөлме ашық па?'),12000);
+ setTimeout(()=>fail('Қосылу уақыты бітті.'),12000);
  peer.on('error',e=>fail(e.type==='peer-unavailable'?'Бұл ID-мен ашық бөлме табылмады':'Желі қатесі: '+e.type));
  peer.on('open',()=>{const conn=peer.connect(PEERPFX+id,{serialization:'json',reliable:true});net.conn=conn;
   conn.on('open',()=>conn.send({t:'hello',name:user.name,id:user.id,hero:$('#hero').value,face:save.useFace?save.face:null,owned:save.owned,weapon:save.weapon||''}));
