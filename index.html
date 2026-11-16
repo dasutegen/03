@@ -170,7 +170,7 @@ function makeLevel(){
  obj={type:mt,need:0,have:0,t:0,on:false,done:false,cx:-260,lockX:world-aw+10,n:0};
  if(mt==='keys'){obj.need=3;for(let i=0;i<3&&st.length;i++){const q=st[Math.floor((i+.7)*st.length/3)%st.length];picks.push({x:q.x+q.w/2+(i-1)*20,y:q.y-34,t:'k'})}}
  if(mt==='hunt')obj.need=Math.max(2,Math.ceil(foes.length*.8));
- if(mt==='coins')obj.need=Math.max(7,Math.ceil(coins.length*.8));
+ if(mt==='coins')obj.need=Math.max(6,Math.ceil(coins.length*.6));
  if(mt==='time')obj.t=Math.ceil(world/222*2.6+12)*60;
  if(mt==='survive')obj.t=1200;
  for(const pl of PL)Object.assign(pl,{star:0,x:55+pl.slot*30,y:428,vx:0,vy:0,ground:false,inv:45,sx:55+pl.slot*30,sy:470,jumps:0,coy:0,on:null,jd:false,buf:0,energy:100,lock:0,fuel:100,hero:level>=70?'super':pl.bh,tx:undefined,ty:undefined});
