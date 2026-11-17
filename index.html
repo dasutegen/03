@@ -61,6 +61,20 @@ html:not(.has-touch) .mobile{display:none}
 @media(orientation:landscape) and (max-height:480px){.card{padding:10px 16px;width:min(100%,520px)}.card h1{font-size:20px;margin:0 0 4px}.card p:not(.err):not(.stat):not(.note):not(.keep){display:none}.field{margin:4px 0}.btn{padding:9px 20px;margin-top:4px}#shopList{max-height:58vh}.row{margin-top:4px}}
 
 #joinId{letter-spacing:3px;text-align:center}
+
+/* ===== Деңгей таңдау ===== */
+.card.wide{width:min(100%,1000px)}.card h1 small{font-size:.5em;color:#e89a00;margin-left:8px}
+.lvh{text-align:left;margin:18px 4px 8px;font-size:15px;color:var(--ink)}
+.lvgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px}.lvgrid.hascur{margin-top:36px}
+.lvl{position:relative;display:flex;flex-direction:column;gap:6px;padding:8px 8px 6px;border:1px solid var(--line);border-radius:10px;background:var(--pill);color:var(--ink);cursor:pointer;font:600 11px system-ui;min-height:116px;text-align:center}
+.lvl .n{font:800 17px system-ui;text-align:left;opacity:.8}.lvl .lk{position:absolute;top:8px;right:8px;font-size:12px}
+.lvl .ic{font-size:30px;line-height:1;margin:2px 0}.lvl .tt{border-top:1px solid var(--line);padding-top:5px;font-size:11px;color:var(--sub)}
+.lvl .sr{color:#e89a00;font-size:12px;letter-spacing:1px;min-height:14px}
+.lvl.locked{opacity:.55;cursor:not-allowed;filter:grayscale(.6)}.lvl:not(.locked):hover{box-shadow:0 4px 14px #0003;transform:translateY(-1px)}
+.lvl.cur{border:2px solid #1b2840;box-shadow:0 0 0 3px #ffca4866}
+.lvl.cur::before{content:'Бастау';position:absolute;top:-34px;left:50%;transform:translateX(-50%);background:#1b2840;color:#fff;padding:6px 14px;border-radius:8px;font:700 12px system-ui;white-space:nowrap}
+.lvl.cur::after{content:'';position:absolute;top:-10px;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#1b2840;border-bottom:0}
+@media(max-width:520px){.lvgrid{grid-template-columns:repeat(3,1fr)}}
 </style><meta name="theme-color" content="#101c37"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Dastan2026"></head><body><main class="shell"><header class="top"><div class="brand">🎮 <span>Dastan2026</span></div><div class="stats"><div class="pill">🌟 <b id="level">1</b>/100</div><div class="pill">🟡 <b id="coins">0</b></div><div class="pill">🔫 <b id="ammo">0</b></div><div class="pill">❤️ <b id="lives">3</b></div><button class="ic" id="invBtn" title="Достарды шақыру" style="display:none">🔗</button><button class="ic" id="fsBtn" title="Толық экран">⛶</button><button class="ic" id="pauseBtn" title="Үзіліс (P)">⏸</button><button class="ic" id="muteBtn" title="Дыбыс (M)">🔊</button></div></header>
 <section class="stage"><canvas id="game" width="960" height="540"></canvas>
 <div class="overlay" id="overlay"><div class="card" id="loginCard"><h1 id="authTitle">Кіру</h1><p>Ойынға кіру үшін логин мен құпиясөзді енгіз.</p>
@@ -72,16 +86,17 @@ html:not(.has-touch) .mobile{display:none}
 <button class="link" id="authSwitch" type="button">Аккаунтың жоқ па? Тіркел</button>
 <p class="note" id="authNote"></p></div>
 <div class="card" id="coopCard" style="display:none"><h1>👥 Бірге ойнау</h1><p class="keep">Менің ID: <b id="myId">—</b> · бөлмеде ең көбі 4 ойыншы</p>
-<div class="row"><button class="btn" id="hostBtn">Бөлме ашу</button></div><p class="keep">ID-ді өзің толтыр.</p><p class="keep">Бірге ойна.</p>
+<div class="row"><button class="btn" id="hostBtn">Бөлме ашу</button></div><p class="keep">📱💻 Телефоннан да, ноутбуктан да қосылуға болады. Бөлме ашқан соң жоғарғы 🔗 батырмасымен достарыңа шақыру сілтемесін жібер: ол ID-ді өзі толтырады. Әр адам өз құрылғысында өз экранын, өз камерасын көреді.</p><p class="keep">Бөлме ашсаң, достарың сенің ID-ің арқылы қосылады және сенің деңгейіңде бірге ойнайды.</p>
 <label class="field">Досыңның ID нөмірі<input type="text" id="joinId" inputmode="numeric" maxlength="5" autocomplete="off"></label><button class="btn alt" id="joinBtn">Қосылу</button>
 <p class="err" id="coopErr" role="alert"></p><button class="btn alt sm" id="coopBack">Артқа</button>
- <p class="note" id="coopWarn" style="display:none">ID тіркелімі қосылмаған.</p></div>
+<p class="note" id="coopWarn" style="display:none">⚠ Ғаламдық ID тіркелімі қосылмаған: ID тек осы құрылғыда берілді және басқа құрылғылармен қайталануы мүмкін. README-дегі Supabase қадамдарын орында.</p></div>
+<div class="card wide" id="levelsCard" style="display:none"><h1>🗺 Деңгейлер <small id="lvlTotal"></small></h1><p class="keep">Деңгейлер бірінен соң бірі ашылады. Әр деңгейден 1–5 ⭐ аласың: өмір жоғалтпасаң, тиын мен жауларды көп жинасаң және тез өтсең, жұлдыз көп болады.</p><div id="lvlGrid"></div><button class="btn alt" id="lvlBack">Артқа</button></div>
 <div class="card" id="shopCard" style="display:none"><h1>🛒 Дүкен</h1><p class="keep">Қалтаңда: <b id="shopCoins">0</b> 🟡. Жинаған тиыныңды күшейтулерге жұмса.</p><div id="shopList"></div><button class="btn alt" id="shopBack">Артқа</button></div>
 <div class="card" id="menuCard" style="display:none"><h1 id="title">Dastan2026</h1><p id="message"></p><p class="stat" id="stats"></p>
 <div id="pick"><label for="hero" style="display:block;margin:10px 0 4px;color:var(--sub)">Кейіпкерді таңда:</label><select class="hero-pick" id="hero"><option value="explorer">🧢 Саяхатшы</option><option value="ninja">🥷 Ниндзя</option><option value="robot">🤖 Робот</option><option value="wizard">🧙 Сиқыршы</option><option value="astronaut">👩‍🚀 Ғарышкер</option></select>
 <label class="chk"><input type="checkbox" id="useFace"> Өз салған бетімді қолдану</label>
-<div class="row"><button class="btn alt sm" id="faceBtn">🎨 Бетімді салу</button><button class="btn alt sm" id="coopBtn">👥 Бірге ойнау</button><button class="btn alt sm" id="shopBtn">🛒 Дүкен</button><button class="btn alt sm" id="outBtn">🚪 Шығу</button></div></div>
-<button class="btn" id="start">Жаңа ойын</button><button class="btn alt" id="cont" style="display:none"></button>
+<div class="row"><button class="btn alt sm" id="faceBtn">🎨 Бетімді салу</button><button class="btn alt sm" id="coopBtn">👥 Бірге ойнау</button><button class="btn alt sm" id="shopBtn">🛒 Дүкен</button><button class="btn alt sm" id="outBtn">🚪 Аккаунттан шығу</button></div></div>
+<button class="btn" id="start">Жаңа ойын</button><button class="btn alt" id="lvlBtn">🗺 Деңгейлер</button><button class="btn alt" id="cont" style="display:none"></button><button class="btn alt" id="exitBtn">Шығу</button>
 <p class="hint">A/D жүру · W/Space секіру (екі рет) · I ату · J жұдырық · K тебу · L қалқан · P үзіліс · M дыбыс<br>Прогресс аккаунтыңа автоматты сақталады.</p><p class="note" id="iosTip" style="display:none">iPhone: Safari-де «Бөлісу» → «Үй экранына қосу» таңда, ойын толық экранда ашылады.</p><p class="rot">📱 Телефонды көлденең ұстасаң, ойын үлкенірек көрінеді.</p></div>
 <div class="card" id="faceEd" style="display:none"><h1>🎨 Бетіңді сал</h1><p>Дөңгелектің ішіне өз бетіңді сал: ол кейіпкеріңнің басына қойылады.</p><canvas id="faceCv" width="128" height="128"></canvas><div class="tools" id="swatches"></div>
 <div class="tools" style="margin-top:8px"><label>Қалыңдық <input type="range" id="fsize" min="2" max="14" value="5"></label><label>Тері түсі <input type="color" id="skin" value="#ffd2a3"></label><button class="btn alt sm" id="feraser">🧽 Өшіргіш</button><button class="btn alt sm" id="fclear">🗑 Тазалау</button></div>
@@ -101,7 +116,7 @@ const $=s=>document.querySelector(s),c=$('#game'),g=c.getContext('2d'),W=960,H=5
 U={level:$('#level'),coins:$('#coins'),ammo:$('#ammo'),lives:$('#lives')},
 TH=[['КӨКТЕМГІ ОРМАН','#75dafa','#d1f4dc','#94d9ac','#865338','#39b85e'],['ҚҰМДЫ ШӨЛ','#ffb66b','#ffe6a5','#e7b866','#9a6341','#eaa13e'],['МҰЗДЫ ТАУЛАР','#8bd8ff','#e6f8ff','#a8d7eb','#687d9a','#54c8df'],['ТҮНГІ ҚАЛА','#222d67','#6959a9','#454881','#49405e','#9271ed'],['ЖАНАРТАУ АРАЛЫ','#ff8868','#ffd18c','#bc6653','#604247','#fa854c'],['ҒАРЫШ ӘЛЕМІ','#192957','#5276b8','#354b83','#444875','#53c7c8'],['ҚАЗАҚСТАН ДАЛАСЫ','#6ec3ff','#fff1c9','#d4bd72','#8a5a34','#7bc043']];
 let keys=LK,baseN=0,fxq=[],net={mode:'solo',room:0},PL=[],level=1,score=0,ammo=0,lives=3,cam=0,frame=0,running=false,paused=false,muted=false,shake=0,hero='explorer',best=1,world=2300,theme=TH[0],plats=[],coins=[],picks=[],foes=[],shots=[],spikes=[],parts=[],texts=[],boss=null,banner=0,lastShot=-99,lastPunch=-99,lastKick=-99,fx=0,fxKind='punch',jumpDown=false,buf=0,energy=100,lock=0,seed=1,mode='menu',raf=0,last=0,acc=0,AC;
-let faceImg=null,storageOK=true,springs=[],eshots=[],obj={type:'run',need:0,have:0,t:0,on:false,done:false,cx:-260,lockX:0};
+let lvs={t0:0,hits:0,kills:0,ft:0,coins:0,ct:0,par:1e9},resB=null,faceImg=null,storageOK=true,springs=[],eshots=[],obj={type:'run',need:0,have:0,t:0,on:false,done:false,cx:-260,lockX:0};
 const HEROES=['explorer','ninja','robot','wizard','astronaut'],TRE=['Алтын адам','Домбыра','Іле қызғалдағы','Бәйтерек'],SHOP=[
  {id:'life',n:'Қосымша өмір',i:'❤️',d:'Әр жаңа ойынды +1 өмірмен бастайсың',p:[60,140,260]},
  {id:'ammo',n:'Бастапқы оқ',i:'🔫',d:'Ойын басында +10 оқ',p:[40,90,160]},
@@ -114,16 +129,21 @@ const HEROES=['explorer','ninja','robot','wizard','astronaut'],TRE=['Алтын 
  {id:'sword',n:'Қылыш',i:'⚔️',d:'J: кең сілтейді, 2 зиян, 3 жауға дейін тиеді',p:[120],w:1},
  {id:'axe',n:'Айбалта',i:'🪓',d:'J: ауыр соққы, 3 зиян, жауды шайқалтып тастайды',p:[220],w:1},
  {id:'bow',n:'Садақ',i:'🏹',d:'I: жебе атады, жауларды тесіп өтеді, 2 зиян (оқ керек)',p:[160],w:1},
- {id:'staff',n:'Отты таяқ',i:'🔥',d:'I: от добы, жарылып маңайдағы жауларға да тиеді (оқ керек)',p:[300],w:1}];
+ {id:'staff',n:'Отты таяқ',i:'🔥',d:'I: от добы, жарылып маңайдағы жауларға да тиеді (оқ керек)',p:[300],w:1},
+ {id:'tumar',n:'Тұмар',i:'🧿',d:'Артефакт: әр деңгейде бірінші соққыдан қорғайды',p:[350]},
+ {id:'wing',n:'Бүркіт қанаты',i:'🦅',d:'Артефакт: ауада секіру түймесін ұстасаң, баяу сырғып түсесің',p:[450]},
+ {id:'kobyz',n:'Қобыз',i:'🎻',d:'Артефакт: соққы алғанда маңайдағы жауларды дыбыс толқынымен тоқтатады',p:[400]},
+ {id:'helm',n:'Алтын дулыға',i:'⛑️',d:'Артефакт: жауды басқанда 2 зиян және биік секіресің',p:[500]},
+ {id:'pouch',n:'Қазына қалтасы',i:'👝',d:'Артефакт: жиналған тиын 25% көп болады',p:[320]}];
 SHOP.forEach(s=>s.max=s.p.length);
-const MIS=['run','keys','hunt','coins','time','survive','escape'],MN={run:'Мәреге жет',keys:'3 кілт тап',hunt:'Жауларды жең',coins:'Тиын жина',time:'Уақытқа үлгер!',survive:'Алаңды қорға: 20 секунд',escape:'Жалыннан қаш!',boss:'Бастықты жең'},
+const MIS=['run','keys','hunt','coins','time','survive','escape'],MN={run:'Мәреге жет',keys:'3 кілт тап',hunt:'Жауларды жең',coins:'Тиын жина',time:'Уақытқа үлгер!',survive:'Алаңды қорға: 30 секунд',escape:'Жалыннан қаш!',boss:'Бастықты жең'},
 FT={walker:['#321a44','#7e34c4'],jumper:['#4a2a0e','#ff8a2a'],charger:['#4a0a14','#ff3b30'],shooter:['#0e3b3f','#3de0c8'],spiker:['#2b2f3a','#c9d3e6'],ghost:['#cfe3ff','#8fb8ff'],fly:['#22123a','#b44cff']},
 BOSSES=[{n:'Жалмауыз кемпір',w:60,h:70,hov:1},{n:'Айдаһар',w:110,h:70},{n:'Дәу',w:90,h:110},{n:'Жезтырнақ',w:80,h:70},{n:'Албасты',w:56,h:80},{n:'Мыстан',w:100,h:80},{n:'Шайтан',w:80,h:90,hov:1},{n:'Алып',w:100,h:120},{n:'Темір Хан',w:80,h:100},{n:'Қара Хан',w:90,h:110}];
 let SAVE_KEY='',BAK_KEY='',user=null,dirty=false;
 const own=id=>((p===me?save.owned:p.owned)||{})[id]|0,maxL=()=>5+own('life');
-function defSave(){return{v:2,u:0,weapon:'',coins:0,owned:{},best:1,hero:'explorer',treasures:[],face:null,faceLayer:null,skin:'#ffd2a3',useFace:false,muted:false,run:null,wins:0,plays:0}}
+function defSave(){return{v:2,u:0,weapon:'',st:'0'.repeat(100),coins:0,owned:{},best:1,hero:'explorer',treasures:[],face:null,faceLayer:null,skin:'#ffd2a3',useFace:false,muted:false,run:null,wins:0,plays:0}}
 function sum(s){let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return h}
-function sanitize(o){const d=Object.assign(defSave(),o&&typeof o==='object'?o:{});d.best=Math.max(1,Math.min(100,d.best|0));d.muted=!!d.muted;d.u=Math.max(0,+d.u||0);d.coins=Math.max(0,Math.min(1e9,d.coins|0));{const ow={};for(const s of SHOP)ow[s.id]=Math.max(0,Math.min(s.max,(d.owned&&d.owned[s.id])|0));d.owned=ow}d.weapon=SHOP.some(s=>s.w&&s.id===d.weapon)&&d.owned[d.weapon]?d.weapon:'';d.useFace=!!d.useFace;
+function sanitize(o){const d=Object.assign(defSave(),o&&typeof o==='object'?o:{});d.best=Math.max(1,Math.min(100,d.best|0));d.muted=!!d.muted;d.u=Math.max(0,+d.u||0);d.coins=Math.max(0,Math.min(1e9,d.coins|0));{const ow={};for(const s of SHOP)ow[s.id]=Math.max(0,Math.min(s.max,(d.owned&&d.owned[s.id])|0));d.owned=ow}d.weapon=SHOP.some(s=>s.w&&s.id===d.weapon)&&d.owned[d.weapon]?d.weapon:'';d.st=typeof d.st==='string'&&/^[0-5]{100}$/.test(d.st)?d.st:'0'.repeat(100);d.useFace=!!d.useFace;
  d.treasures=Array.isArray(d.treasures)?[...new Set(d.treasures.filter(i=>Number.isInteger(i)&&i>=0&&i<TRE.length))]:[];
  for(const k of['face','faceLayer'])if(typeof d[k]!=='string'||d[k].length>90000||!/^data:image\/png;base64,[A-Za-z0-9+\/=]+$/.test(d[k]))d[k]=null;
  if(!d.face)d.useFace=false;if(!HEROES.includes(d.hero))d.hero='explorer';if(!/^#[0-9a-f]{6}$/i.test(d.skin))d.skin='#ffd2a3';
@@ -138,45 +158,48 @@ const R=()=>(seed=seed*16807%2147483647,(seed-1)/2147483646);
 function snd(f,d=.1,t='square',v=.05,s=0){if(net.mode==='host'&&fxq.length<80)fxq.push(['n',f,d,t,v,s]);if(muted)return;try{AC=AC||new AudioContext();const o=AC.createOscillator(),a=AC.createGain(),n=AC.currentTime;o.type=t;o.frequency.setValueAtTime(f,n);if(s)o.frequency.exponentialRampToValueAtTime(Math.max(40,f+s),n+d);a.gain.setValueAtTime(v,n);a.gain.exponentialRampToValueAtTime(.001,n+d);o.connect(a);a.connect(AC.destination);o.start(n);o.stop(n+d)}catch(e){}}
 function burst(x,y,col,n=10,sp=4){if(net.mode==='host'&&fxq.length<80)fxq.push(['b',x,y,col,n,sp]);for(let i=0;i<n;i++){const a=Math.random()*6.28,s=Math.random()*sp;parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1.5,l:26+Math.random()*16,c:col,s:2+Math.random()*3})}}
 function say(x,y,s,col='#fff'){if(net.mode==='host'&&fxq.length<80)fxq.push(['s',x,y,s,col]);texts.push({x,y,s,c:col,l:44})}
-function earn(n){score+=n;if(p===me){save.coins+=n;dirty=true}else if(p.conn&&p.conn.open)p.conn.send({t:'earn',n})}
+function earn(n){score+=n;const k=n+(own('pouch')?Math.ceil(n*.25):0);if(p===me){save.coins+=k;dirty=true}else if(p.conn&&p.conn.open)p.conn.send({t:'earn',n:k})}
 function sync(){U.coins.textContent=save.coins;U.ammo.textContent=p===me?ammo:me.ammo;U.lives.textContent=p===me?lives:me.lives;U.level.textContent=level}
 function makeLevel(){
  const L=level;theme=TH[(L-1)%TH.length];seed=L*9973+11;world=2300+Math.min(L,60)*16;
  plats=[{x:0,y:470,w:390,h:70,x0:0,amp:0}];spikes=[];springs=[];coins=[];picks=[];foes=[];shots=[];eshots=[];parts=[];texts=[];boss=null;
- const aw=L%10===0?520:340;let x=450,py=420;
+ const aw=L%10===0?520:340;let x=450,py=420,pv={l:0,r:390,y:470};
  while(x<world-aw-180){
-  const w=Math.max(100,Math.round(135+R()*70-L*.5)),y=Math.max(300,Math.min(440,py+(R()-.5)*110));py=y;
+  const w=Math.max(112,Math.round(150+R()*55-L*.55)),y=Math.max(300,Math.min(440,py+(R()-.5)*110));py=y;
   const q={x,y,w,h:22,x0:x,amp:0,sp:0};
-  if(L>=8&&R()<.28){q.amp=20+R()*12;q.sp=.02+R()*.015;q.moving=1;q.x0=x+q.amp}
+  if(L>=5&&R()<.36){q.amp=20+R()*12;q.sp=.02+R()*.015;q.moving=1;q.x0=x+q.amp}
+  {const ql=()=>q.amp?q.x0-q.amp:q.x,qr=()=>(q.amp?q.x0+q.amp:q.x)+q.w;let g=0;while(g++<40&&!jumpOK(pv,{l:ql(),r:qr(),y:q.y})){q.x-=9;if(q.amp)q.x0-=9;x-=9}pv={l:ql(),r:qr(),y:q.y}}
   plats.push(q);
   if(!q.moving){
-   if(w>=130&&L>=4&&R()<.25+L*.004)spikes.push({x:x+w/2-20,y:y-14,w:40,h:14});
+   if(w>=130&&L>=4&&R()<.3+L*.006)spikes.push({x:x+w/2-20,y:y-14,w:40,h:14});
    else if(R()<.75)for(let i=1;i<4;i++)coins.push({x:x+w*i/4,y:y-34});
    if(R()<.3)plats.push({x:x+25,y:y-78,w:70,h:16,x0:x+25,amp:0,sp:0})
    else if(L>=2&&w>=130&&R()<.3){const bx=x+w/2-51,ks=R()<.5?'bqb':'qbq';for(let i=0;i<3;i++){const r=R();plats.push({x:bx+i*34,y:y-110,w:34,h:34,x0:0,amp:0,blk:1,k:ks[i],it:r<.5?'c':r<.65?'s':r<.8?'h':'a',used:false,bump:0})}}
    else if(L>=3&&w>=130&&R()<.22&&!spikes.some(s=>s.x>x&&s.x<x+w)){springs.push({x:x+w/2-14,y:y-14,w:28,h:14,c:0});const hx=x+w/2-40;plats.push({x:hx,y:y-225,w:80,h:16,x0:0,amp:0});for(let i=0;i<4;i++)coins.push({x:hx+10+i*20,y:y-259})}
   }
-  x+=w+q.amp+55+R()*(25+Math.min(L,70)*.7)
+  x+=w+q.amp+60+R()*(30+Math.min(L,90)*.85)
  }
- plats.push({x:Math.min(x,world-aw-140),y:430,w:120,h:22,x0:0,amp:0},{x:world-aw,y:455,w:aw,h:85,x0:0,amp:0});
- const st=plats.filter(q=>!q.moving&&q.w>=100&&q.x>420&&q.x<world-aw-60),na=Math.min(6,2+(L/15|0));
+  {const ar={l:world-aw,r:world,y:455};let cur=pv,n2=0;while(!jumpOK(cur,ar)&&n2++<8){const nl=cur.r+75;plats.push({x:nl,y:430,w:120,h:22,x0:0,amp:0});cur={l:nl,r:nl+120,y:430}}}
+ plats.push({x:world-aw,y:455,w:aw,h:85,x0:0,amp:0});
+ const st=plats.filter(q=>!q.moving&&q.w>=100&&q.x>420&&q.x<world-aw-60),na=Math.min(5,2+(L/20|0));
  for(let i=0;i<na&&st.length;i++){const q=st[Math.floor((i+.5)*st.length/na)];picks.push({x:q.x+q.w/2,y:q.y-30,t:'a'})}
- if(L%4===0&&st.length){const q=st[st.length>>1];picks.push({x:q.x+q.w/2+30,y:q.y-30,t:'h'})}
+ if(L%6===0&&st.length){const q=st[st.length>>1];picks.push({x:q.x+q.w/2+30,y:q.y-30,t:'h'})}
  if(TH.indexOf(theme)===6)for(let i=0;i<3&&st.length;i++){const q=st[Math.floor((i+1.5)*st.length/4)];picks.push({x:q.x+q.w/2-20,y:q.y-34,t:'t',id:(i+L)%4})}
  const mt=L%10===0?'boss':MIS[(L-1+((L-1)/7|0))%7],pool=['walker'];if(L>=3)pool.push('jumper');if(L>=5)pool.push('charger');if(L>=6)pool.push('spiker','fly');if(L>=8)pool.push('shooter');if(L>=12)pool.push('ghost');
- const n=Math.min(12,2+(L/5|0)+(mt==='hunt'?3:0)),hp=1+(L/25|0),sp=Math.min(2.4,.7+L*.02),fl=st.filter(q=>q.w>=120&&!spikes.some(s=>s.x>q.x&&s.x<q.x+q.w));
+ const n=Math.min(16,3+(L/4|0)+(mt==='hunt'?3:0)),hp=1+(L/16|0),sp=Math.min(3.2,.9+L*.03),fl=st.filter(q=>q.w>=112&&!spikes.some(s=>s.x>q.x&&s.x<q.x+q.w));
  for(let i=0;i<n&&fl.length;i++){const q=fl[Math.floor((i+.5)*fl.length/n)%fl.length];foes.push(mkFoe(pool[(i+L)%pool.length],q.x+20+R()*20,q.y,q.x+4,q.x+q.w-34,hp,sp*(i%2?-1:1)))}
- if(mt==='boss'){const bk=Math.min(9,(L/10|0)-1),B=BOSSES[bk],hv=B.hov?70:0,bh=14+bk*6;boss={type:'boss',boss:1,bk,x:world-170-B.w,y:455-B.h-hv,gy:455-B.h,by:455-B.h-hv,hov:!!B.hov,w:B.w,h:B.h,a:world-aw+30,b:world-140-B.w,hp:bh,mh:bh,v:1.3+bk*.08,alive:true,flash:0,stun:0,iv:0,t:0,ph:0,al:1,face:-1,on:false,air:false,vy:0};foes.push(boss)}
+ if(mt==='boss'){const bk=Math.min(9,(L/10|0)-1),B=BOSSES[bk],hv=B.hov?70:0,bh=22+bk*12;boss={type:'boss',boss:1,bk,x:world-170-B.w,y:455-B.h-hv,gy:455-B.h,by:455-B.h-hv,hov:!!B.hov,w:B.w,h:B.h,a:world-aw+30,b:world-140-B.w,hp:bh,mh:bh,v:1.3+bk*.08,alive:true,flash:0,stun:0,iv:0,t:0,ph:0,al:1,face:-1,on:false,air:false,vy:0};foes.push(boss)}
  obj={type:mt,need:0,have:0,t:0,on:false,done:false,cx:-260,lockX:world-aw+10,n:0};
- if(mt==='keys'){obj.need=3;for(let i=0;i<3&&st.length;i++){const q=st[Math.floor((i+.7)*st.length/3)%st.length];picks.push({x:q.x+q.w/2+(i-1)*20,y:q.y-34,t:'k'})}}
- if(mt==='hunt')obj.need=Math.max(2,Math.ceil(foes.length*.8));
- if(mt==='coins')obj.need=Math.max(6,Math.ceil(coins.length*.6));
- if(mt==='time')obj.t=Math.ceil(world/222*2.6+12)*60;
- if(mt==='survive')obj.t=1200;
- for(const pl of PL)Object.assign(pl,{star:0,x:55+pl.slot*30,y:428,vx:0,vy:0,ground:false,inv:45,sx:55+pl.slot*30,sy:470,jumps:0,coy:0,on:null,jd:false,buf:0,energy:100,lock:0,fuel:100,hero:level>=70?'super':pl.bh,tx:undefined,ty:undefined});
- jumpDown=false;buf=0;energy=100;lock=0;hero=p.hero;cam=0;banner=170;baseN=foes.length;if(L===70)say(70,380,'🦸 Супер Батыр оянды!','#ffe066');sync()}
+ if(mt==='keys'){const nk=3+(L/25|0);for(let i=0;i<nk&&st.length;i++){const q=st[Math.floor((i+.7)*st.length/nk)%st.length];picks.push({x:q.x+q.w/2+(i%3-1)*20,y:q.y-34,t:'k'});obj.need++}if(!obj.need)obj.type='run'}
+ if(mt==='hunt'){obj.need=Math.min(foes.length,Math.max(2,Math.ceil(foes.length*(L>=40?1:.85))));if(!obj.need)obj.type='run'}
+ if(mt==='coins'){for(const q of plats)if(!q.blk&&!q.moving&&q.w>=100&&q.x>380&&q.x<world-aw-60){const sp=spikes.some(s=>s.x>q.x&&s.x<q.x+q.w);for(let i=1;i<4;i++){const cx=q.x+q.w*i/4,cy=q.y-(sp?72:34)-(i===2?12:0);if(!coins.some(c=>Math.abs(c.x-cx)<8&&Math.abs(c.y-cy)<20))coins.push({x:cx,y:cy})}}
+  obj.need=Math.max(6,Math.min(Math.ceil(coins.length*.7),coins.length-4))}
+ if(mt==='time')obj.t=Math.ceil(world/222*2.1+8)*60;
+ if(mt==='survive')obj.t=1800;
+ for(const pl of PL)Object.assign(pl,{star:0,x:55+pl.slot*30,y:428,vx:0,vy:0,ground:false,inv:45,sx:55+pl.slot*30,sy:470,jumps:0,coy:0,on:null,jd:false,buf:0,energy:100,lock:0,fuel:100,tm:1,hero:level>=70?'super':pl.bh,tx:undefined,ty:undefined});
+ jumpDown=false;buf=0;energy=100;lock=0;hero=p.hero;cam=0;banner=170;baseN=foes.length;lvs={t0:frame,hits:0,kills:0,ft:foes.filter(e=>!e.boss).length,coins:0,ct:coins.length,par:Math.round(world/222*60*2.2)};if(L===70)say(70,380,'🦸 Супер Батыр оянды!','#ffe066');sync()}
 function hit(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y}
-function dmg(e,n){if(e.boss){if(e.iv>0)return;e.iv=16}e.hp-=n;e.flash=6;if(e.hp<=0){e.alive=false;if(!e.boss&&!e.sp&&!e.minion&&obj.type==='hunt')obj.have++;const v=e.boss?25+(e.bk|0)*5:3;earn(v);sync();burst(e.x+e.w/2,e.y+e.h/2,e.boss?'#ffd54a':'#b56fe0',e.boss?40:16,5);say(e.x,e.y-8,'+'+v,'#ffe06b');snd(220,.2,'square',.06,300);if(e.boss){shake=26;eshots=[];picks.push({x:e.x+e.w/2,y:e.y-10,t:'h'});say(e.x,e.y-30,'БАСТЫҚ ЖЕҢІЛДІ!','#ffe06b')}}else snd(180,.07,'square',.05)}
+function dmg(e,n){if(e.boss){if(e.iv>0)return;e.iv=16}e.hp-=n;e.flash=6;if(e.hp<=0){e.alive=false;if(!e.boss&&!e.sp&&!e.minion){lvs.kills++;if(obj.type==='hunt')obj.have++}const v=e.boss?25+(e.bk|0)*5:3;earn(v);sync();burst(e.x+e.w/2,e.y+e.h/2,e.boss?'#ffd54a':'#b56fe0',e.boss?40:16,5);say(e.x,e.y-8,'+'+v,'#ffe06b');snd(220,.2,'square',.06,300);if(e.boss){shake=26;eshots=[];picks.push({x:e.x+e.w/2,y:e.y-10,t:'h'});say(e.x,e.y-30,'БАСТЫҚ ЖЕҢІЛДІ!','#ffe06b')}}else snd(180,.07,'square',.05)}
 function fire(){const sup=hero==='super',w=p.wp,bow=w==='bow',st=w==='staff';if((ammo<=0&&!sup)||frame-lastShot<(sup?9:bow?16:st?20:14))return;if(!sup)ammo--;lastShot=frame;
  const x0=p.face>0?p.x+p.w:p.x-(sup?26:bow?18:12);
  shots.push(sup?{x:x0,y:p.y+13,v:p.face*13,life:70,laser:1,pierce:1,dmg:2,o:p}:bow?{x:x0,y:p.y+17,v:p.face*11,life:90,arrow:1,pierce:1,dmg:2,o:p}:st?{x:x0,y:p.y+15,v:p.face*7,life:80,fire:1,splash:1,dmg:2,o:p}:{x:x0,y:p.y+19,v:p.face*9,life:100,o:p});
@@ -188,21 +211,22 @@ function melee(k){const kick=k==='kick',W=!kick&&(p.wp==='sword'||p.wp==='axe')?
  const dm=(W==='axe'?3:W==='sword'?2:kick?2:1)+(hero==='super'?1:0);
  for(const t of ts){dmg(t,dm);if(!t.boss){t.stun=W==='axe'?26:kick?20:10;t.x+=p.face*(W==='axe'?16:kick?14:8)}shake=Math.max(shake,W==='axe'?8:5)}}
 function hurt(fall){
- if(p.star>0&&!fall)return;if(!fall){if(p.inv)return;if(p.guard){energy=Math.max(0,energy-14);p.inv=12;snd(240,.08,'square',.05);burst(p.x+15+p.face*24,p.y+20,'#81d8ff',6);return}}
- lives--;sync();shake=14;if(p===me)vib(60);burst(p.x+15,p.y+20,'#ff5a5f',16,5);snd(150,.3,'sawtooth',.07,-90);
+ if(p.star>0&&!fall)return;if(!fall){if(p.inv)return;if(p.guard){energy=Math.max(0,energy-14);p.inv=12;snd(240,.08,'square',.05);burst(p.x+15+p.face*24,p.y+20,'#81d8ff',6);return}if(own('tumar')&&p.tm){p.tm=0;p.inv=60;burst(p.x+15,p.y+20,'#6ec3ff',14,4);snd(520,.15,'sine',.05,200);say(p.x,p.y-30,'🧿 Тұмар қорғады','#9be8ff');return}}
+ lives--;lvs.hits++;sync();shake=14;if(p===me)vib(60);burst(p.x+15,p.y+20,'#ff5a5f',16,5);snd(150,.3,'sawtooth',.07,-90);
+ if(own('kobyz')){for(const e of foes)if(e.alive&&!e.boss&&Math.abs(e.x-p.x)<260&&Math.abs(e.y-p.y)<200){e.stun=80;e.flash=8}burst(p.x+15,p.y+20,'#c9a0ff',26,6);snd(110,.4,'sine',.07,60)}
  if(lives<=0){killP();return}
  if(fall){p.x=p.sx;p.y=p.sy-p.h;p.vx=0;p.vy=0;if(p===me)cam=Math.max(0,p.x-W*.35)}else{p.vy=-7;p.vx=-p.face*5}
- p.inv=100}
+ p.inv=70}
 function nextLevel(){
  snd(660,.12,'triangle',.06,0);setTimeout(()=>snd(880,.12,'triangle',.06,0),110);setTimeout(()=>snd(1180,.2,'triangle',.06,0),220);
- if(level>=100){finish(true);return}
- level++;if(level>best)best=level;const rev=[];
+ if(level>=100){setStar(100,rateLevel());finish(true);return}
+ const sr=rateLevel(),doneL=level;setStar(doneL,sr);level++;if(level>best)best=level;const rev=[];
  for(const q of PL){swapIn(q);if(q.dead){q.dead=false;lives=3+own('life');rev.push(q)}else if(level%5===0&&lives<maxL())lives++;swapOut(q)}
- swapIn(me);makeLevel();for(const q of rev)say(q.x,q.y-20,'🔄 '+(q.name||'Қаһарман')+' тірілді!','#9be8ff');
- save.best=best;save.run={level,score,ammo,lives};persist();if(net.mode==='host')netSend({t:'lv',level,score})}
+ swapIn(me);makeLevel();resB={l:doneL,s:sr,t:220};for(const q of rev)say(q.x,q.y-20,'🔄 '+(q.name||'Қаһарман')+' тірілді!','#9be8ff');
+ save.best=best;save.run={level,score,ammo,lives};persist();if(net.mode==='host')netSend({t:'lv',level,score,rate:{l:doneL,s:sr}})}
 function swapIn(pl){p=pl;lives=pl.lives;ammo=pl.ammo;energy=pl.energy;lock=pl.lock;buf=pl.buf;jumpDown=pl.jd;lastShot=pl.lastShot;lastPunch=pl.lastPunch;lastKick=pl.lastKick;fx=pl.fx;fxKind=pl.fxk;keys=pl.keys;hero=pl.hero}
 function swapOut(pl){pl.lives=lives;pl.ammo=ammo;pl.energy=energy;pl.lock=lock;pl.buf=buf;pl.jd=jumpDown;pl.lastShot=lastShot;pl.lastPunch=lastPunch;pl.lastKick=lastKick;pl.fx=fx;pl.fxk=fxKind}
-function newPlayer(slot,info){const ow=info.owned||{};return{x:55,y:428,w:30,h:42,vx:0,vy:0,ground:false,inv:0,face:1,sx:55,sy:470,jumps:0,coy:0,anim:0,on:null,guard:false,star:0,fuel:100,lives:3+(ow.life|0),ammo:(ow.ammo|0)*10,energy:100,lock:0,buf:0,jd:false,lastShot:-99,lastPunch:-99,lastKick:-99,fx:0,fxk:'punch',keys:slot?{}:LK,bh:info.hero||'explorer',hero:info.hero||'explorer',fimg:null,owned:ow,wp:info.wp||'',name:info.name||'',id:info.id|0,slot,dead:false,conn:null}}
+function newPlayer(slot,info){const ow=info.owned||{};return{x:55,y:428,w:30,h:42,vx:0,vy:0,ground:false,inv:0,face:1,sx:55,sy:470,jumps:0,coy:0,anim:0,on:null,guard:false,star:0,fuel:100,lives:3+(ow.life|0),ammo:(ow.ammo|0)*10,energy:100,lock:0,buf:0,jd:false,lastShot:-99,lastPunch:-99,lastKick:-99,fx:0,fxk:'punch',keys:slot?{}:LK,bh:info.hero||'explorer',hero:info.hero||'explorer',fimg:null,owned:ow,wp:info.wp||'',name:info.name||'',id:info.id|0,slot,dead:false,conn:null,tm:1,gl:0}}
 function nearest(x){let b=null,bd=1e9;for(const q of PL)if(!q.dead){const d=Math.abs(q.x-x);if(d<bd){bd=d;b=q}}return b||me}
 function viewP(){return me.dead?nearest(me.x):me}
 function killP(){p.dead=true;p.lives=0;burst(p.x+15,p.y+20,'#ff5a5f',24,6);say(p.x,p.y-30,(p.name||'Қаһарман')+' жеңілді','#ff8a8a');if(PL.every(q=>q.dead))finish(false)}
@@ -210,7 +234,7 @@ function foesStep(){
  if(frame%180===0&&foes.some(e=>e.alive&&PL.some(q=>!q.dead&&Math.abs(e.x-q.x)<320)))snd(70,.45,'sawtooth',.05,-20);
  for(const e of foes)if(e.alive){
   if(e.flash>0)e.flash--;if(e.stun>0){e.stun--;continue}
-  if(e.iv>0)e.iv--;const sp=p;p=nearest(e.x+e.w/2);if(e.boss)bossTick(e);else foeMove(e);p=sp}}
+  if(e.iv>0)e.iv--;const sp=p;p=nearest(e.x+e.w/2);if(e.boss){bossTick(e);if(e.bk>=5&&(e.bk>=8||frame%2===0))bossTick(e)}else foeMove(e);p=sp}}
 function shotsStep(){for(const s of shots){s.x+=s.v;s.life--;const sw=s.laser?26:s.arrow?18:s.fire?14:12;
  for(const e of foes)if(e.alive&&hit({x:s.x,y:s.y,w:sw,h:s.fire?14:7},e)){const sp=p;if(s.o)p=s.o;dmg(e,s.dmg||1);
   if(s.splash){for(const f of foes)if(f!==e&&f.alive&&Math.abs(f.x-e.x)<80&&Math.abs(f.y-e.y)<80)dmg(f,1);burst(s.x,s.y,'#ff8a1f',14,4);snd(160,.2,'sawtooth',.05,-80)}
@@ -237,6 +261,7 @@ function stepPlayer(){
  if(jp)buf=7;else if(buf>0)buf--;
  if(buf>0){if(p.ground||p.coy>0){p.vy=-13.4;p.jumps=1;p.ground=false;p.coy=0;buf=0;snd(300,.15,'square',.04,300);burst(p.x+15,p.y+p.h,'#ffffffaa',5,2)}else if(p.jumps<2){p.vy=-12;p.jumps=2;buf=0;snd(420,.15,'square',.04,300);burst(p.x+15,p.y+p.h,'#fff6a8',8,3)}}
  if(!J&&p.vy<-4)p.vy+=.9;
+ if(own('wing')&&J&&!p.ground&&p.vy>1.6&&hero!=='super'){p.vy=Math.min(p.vy,2.1);p.gl=1}else p.gl=0;
  if(hero==='super'&&J&&p.jumps>=2&&p.fuel>0&&!p.ground){p.vy=Math.max(-6,p.vy-1.2);p.fuel-=1.1;if(frame%3===0)burst(p.x+15,p.y+p.h,'#ffd34d',2,2)}
  if(p.coy>0)p.coy--;
  if(keys.KeyI||keys.KeyX)fire();if(keys.KeyJ||keys.KeyZ)melee('punch');if(keys.KeyK||keys.KeyC)melee('kick');
@@ -249,9 +274,9 @@ function stepPlayer(){
  if(p.ground)p.fuel=100;if(p.ground&&Math.abs(p.vx)>.5)p.anim+=.32;if(own('trail')&&frame%3===0&&(Math.abs(p.vx)>1||!p.ground))parts.push({x:p.x+15,y:p.y+p.h-6,vx:-p.vx*.1,vy:-.3,l:26,c:'#ffd34d',s:3});playerObj();if(p.y>H+80)hurt(true);if(p.inv>0)p.inv--;
  for(const s of spikes)if(!p.inv&&!own('boots')&&hit({x:p.x+4,y:p.y+4,w:p.w-8,h:p.h-4},s))hurt(true);
  if(own('magnet'))for(const a of coins)if(!a.taken){const dx=p.x+15-a.x,dy=p.y+20-a.y,dd=Math.hypot(dx,dy);if(dd<130&&dd>1){a.x+=dx/dd*4;a.y+=dy/dd*4}}
- for(const a of coins)if(!a.taken&&Math.hypot(p.x+15-a.x,p.y+20-a.y)<28){a.taken=1;earn(1);if(obj.type==='coins')obj.have++;sync();snd(880,.09,'triangle',.06,500);burst(a.x,a.y,'#ffd84a',6,2.5)}
+ for(const a of coins)if(!a.taken&&Math.hypot(p.x+15-a.x,p.y+20-a.y)<28){a.taken=1;earn(1);lvs.coins++;if(obj.type==='coins')obj.have++;sync();snd(880,.09,'triangle',.06,500);burst(a.x,a.y,'#ffd84a',6,2.5)}
  for(const a of picks)if(!a.taken&&Math.hypot(p.x+15-a.x,p.y+20-a.y)<34){a.taken=1;if(a.t==='h'){if(lives<maxL())lives++;say(a.x,a.y,'+1 ❤️','#ff8aa0')}else if(a.t==='t'){earn(5);if(p===me){if(!save.treasures.includes(a.id)){save.treasures.push(a.id);persist()}}else if(p.conn&&p.conn.open)p.conn.send({t:'tre',id:a.id});say(a.x-30,a.y-12,'✨ '+TRE[a.id],'#ffe066')}else if(a.t==='s'){p.star=480;say(a.x-30,a.y-12,'⭐ Жеңілмес!','#ffe066');shake=6}else if(a.t==='k'){obj.have++;say(a.x-20,a.y-12,'🗝 '+obj.have+'/'+obj.need,'#ffe066')}else{const n=12+(level/10|0)*2;ammo+=n;say(a.x,a.y,'+'+n+' 🔫')}sync();snd(600,.15,'triangle',.06,400);burst(a.x,a.y,'#ffffff',8,3)}
- for(const e of foes)if(e.alive&&(e.al===undefined||e.al>.45)&&hit(p,e)){if(p.star>0)dmg(e,e.boss?2:9);else if(p.vy>1&&old+p.h<e.y+e.h*.55&&e.type!=='spiker'){dmg(e,1);p.vy=-9;p.jumps=1;p.inv=Math.max(p.inv,8)}else hurt(false)}
+ for(const e of foes)if(e.alive&&(e.al===undefined||e.al>.45)&&!(e.stun>0&&!e.boss)&&hit(p,e)){if(p.star>0)dmg(e,e.boss?2:9);else if(p.vy>1&&old+p.h<e.y+e.h*.55&&e.type!=='spiker'){dmg(e,own('helm')?2:1);p.vy=own('helm')?-11.5:-9;p.jumps=1;p.inv=Math.max(p.inv,8)}else hurt(false)}
  if(fx>0)fx--}
 function rr(x,y,w,h,r,col){g.fillStyle=col;g.beginPath();g.roundRect(x,y,w,h,r);g.fill()}
 function drawHero(){
@@ -269,6 +294,9 @@ function drawHero(){
  else{rr(-10,-40,21,17,hero==='robot'?4:8,S[1]);rr(-14,-42,27,9,5,S[2]);g.fillStyle='#fff';g.fillRect(4,-34,5,6);g.fillStyle=hero==='robot'?'#31e7ff':'#26334d';g.fillRect(7,-32,3,4)}
  g.fillStyle=S[3];g.fillRect(-6,-21,6,7);
  if(own('cap')){const ty=p.fimg?-53:-41;g.fillStyle='#1f6fb8';g.beginPath();g.ellipse(0,ty,13,8,0,Math.PI,0);g.fill();g.fillStyle='#ffd34d';g.fillRect(-13,ty-1,26,3);g.fillStyle='#fff';for(let i=-1;i<=1;i++)g.fillRect(i*6-1,ty-6,2,3)}
+ if(own('helm')){const ty=p.fimg?-53:-41;g.fillStyle='#ffd34d';g.beginPath();g.ellipse(0,ty,13,9,0,Math.PI,0);g.fill();g.fillRect(-14,ty-1,28,3);g.fillStyle='#b8860b';g.fillRect(-1.5,ty-14,3,8)}
+ if(own('tumar')){g.fillStyle=p.tm?'#4aa3ff':'#5b6b80';g.beginPath();g.arc(-2,-12,3.5,0,7);g.fill()}
+ if(p.gl){g.fillStyle='#d4b068';for(const s of[-1,1]){g.beginPath();g.moveTo(s*6,-26);g.lineTo(s*30,-40+Math.sin(frame*.4+s)*4);g.lineTo(s*24,-22);g.fill()}}
  if(hero==='ninja'){g.fillStyle='#d44d76';g.fillRect(-12,-35,25,4);g.fillRect(-18,-33,7,3)}
  if(hero==='wizard'){g.fillStyle=S[2];g.beginPath();g.moveTo(-13,-39);g.lineTo(0,-58);g.lineTo(13,-39);g.fill()}
  if(hero==='robot'){g.fillStyle='#bde9e8';g.fillRect(-2,-47,3,6);g.fillRect(-4,-49,7,3)}
@@ -306,16 +334,18 @@ function drawTre(a,b){const x=a.x,y=a.y+b;g.fillStyle='#fff4a855';g.beginPath();
  else if(a.id===2){g.strokeStyle='#3a8f3a';g.lineWidth=3;g.beginPath();g.moveTo(0,13);g.lineTo(0,-2);g.stroke();g.fillStyle='#ff4d6d';for(const r of[-6,0,6]){g.beginPath();g.ellipse(r,-6,4,8,r/12,0,7);g.fill()}}
  else{g.fillStyle='#e8f0f7';g.beginPath();g.moveTo(-5,13);g.lineTo(-1,-8);g.lineTo(1,-8);g.lineTo(5,13);g.fill();g.fillStyle='#ffd34d';g.beginPath();g.arc(0,-12,7,0,7);g.fill()}
  g.restore()}
+function jumpOK(A,B){if(B.l<=A.r&&B.r>=A.l)return A.y-B.y<=235;
+ for(let t2=-1;t2<=90;t2++){let x=A.r-8,feet=A.y,vy=-13.4,j=1;for(let t=0;t<200;t++){if(t===t2&&j<2){vy=-12;j=2}const of=feet;vy=Math.min(14,vy+.62);feet+=vy;x+=3.7;if(vy>=0&&of<=B.y+4&&feet>=B.y&&x+30>B.l+12&&x<B.r-12)return true;if(feet>700)break}}return false}
 function mkFoe(ty,x,qy,a,b,hp,v){const fly=ty==='fly',gh=ty==='ghost';return{type:ty,x,y:fly?qy-110:gh?qy-90:qy-32,gy:qy-32,by:qy-110,w:30,h:32,a:fly?a-74:a,b:fly?b+74:b,hp:gh?hp+1:hp,mh:gh?hp+1:hp,v:ty==='shooter'?.01:v,alive:true,fly,flash:0,stun:0,st:0,jt:40,air:false,vy:0,dash:0,cool:0,iv:0}}
 function goalDone(){const o=obj;return o.type==='keys'||o.type==='hunt'||o.type==='coins'?o.have>=o.need:o.type==='survive'?o.done:o.type==='boss'?!(boss&&boss.alive):true}
 function objLabel(){const o=obj,ok=goalDone()&&(o.type==='keys'||o.type==='hunt'||o.type==='coins')?' ✓':'';return({run:'🏁 Мәреге жет',keys:`🗝 Кілт: ${o.have}/${o.need}`,hunt:`⚔ Жау: ${o.have}/${o.need}`,coins:`🟡 Тиын: ${o.have}/${o.need}`,time:`⏱ ${Math.ceil(o.t/60)} с`,survive:o.done?'✅ Алаң қорғалды':o.on?`🛡 Ұста: ${Math.ceil(o.t/60)} с`:'🛡 Алаңға жет',escape:'🔥 Жалыннан қаш!',boss:'👹 Бастықты жең'}[o.type])+ok}
 function hitBlk(q){q.bump=8;if(q.k==='b'){q.gone=1;earn(1);burst(q.x+17,q.y+17,'#b5651d',12,4);snd(160,.12,'square',.06,-60);sync();return}
  if(q.used){snd(120,.05,'square',.03);return}q.used=true;snd(520,.1,'square',.05,300);
  if(q.it==='c'){earn(3);burst(q.x+17,q.y,'#ffd84a',10,3);say(q.x,q.y-6,'+3','#ffe06b');sync()}else picks.push({x:q.x+17,y:q.y-26,t:q.it})}
-function spawnWave(){if(foes.filter(e=>e.alive&&e.sp).length>=6)return;const w=++obj.n,a=world-320,b=world-80,f=w%2?mkFoe('walker',world-70,455,a,b,1,-1.4):mkFoe('fly',world-90,455,a-60,b+40,1,-1.2);f.sp=1;foes.push(f);burst(f.x,f.y,'#b56fe0',10,3)}
+function spawnWave(){if(foes.filter(e=>e.alive&&e.sp).length>=8)return;const w=++obj.n,a=world-320,b=world-80,f=w%2?mkFoe('walker',world-70,455,a,b,1,-1.4):mkFoe('fly',world-90,455,a-60,b+40,1,-1.2);f.sp=1;foes.push(f);burst(f.x,f.y,'#b56fe0',10,3)}
 function foeMove(e){const ty=e.type;
  if(ty==='ghost'){const dx=p.x-e.x,dy=p.y-30-e.y;e.v=dx>0?1:-1;e.x+=Math.sign(dx)*Math.min(.9,Math.abs(dx));e.y+=Math.sign(dy)*Math.min(.5,Math.abs(dy))+Math.sin(frame*.08+e.a)*.4;return}
- if(ty==='shooter'){e.v=p.x>e.x?.01:-.01;if(++e.st%110===0&&Math.abs(p.x-e.x)<440){const a=Math.atan2(p.y+15-e.y-10,p.x-e.x);eshots.push({x:e.x+15,y:e.y+10,vx:Math.cos(a)*3.4,vy:Math.sin(a)*3.4,gv:0,r:8,life:170,d:0,col:'#3de0c8',kind:'orb'});snd(300,.1,'square',.03,-100)}return}
+ if(ty==='shooter'){e.v=p.x>e.x?.01:-.01;if(++e.st%Math.max(60,110-(level>>1))===0&&Math.abs(p.x-e.x)<440){const a=Math.atan2(p.y+15-e.y-10,p.x-e.x);eshots.push({x:e.x+15,y:e.y+10,vx:Math.cos(a)*3.4,vy:Math.sin(a)*3.4,gv:0,r:8,life:170,d:0,col:'#3de0c8',kind:'orb'});snd(300,.1,'square',.03,-100)}return}
  let sp=e.v;
  if(ty==='charger'){if(e.dash>0){e.dash--;sp=(e.v>0?1:-1)*3.6}else if(e.cool>0)e.cool--;else if(Math.abs(p.x-e.x)<230&&Math.abs(p.y-e.y)<70){e.v=Math.abs(e.v)*(p.x>e.x?1:-1);e.dash=45;e.cool=120;sp=e.v}}
  e.x+=sp;if(e.x<e.a||e.x>e.b){e.v*=-1;e.x=Math.max(e.a,Math.min(e.b,e.x))}
@@ -349,10 +379,10 @@ function worldObj(){
   if(s.kind==='fire'&&s.vy>5&&s.y>=452){s.life=0;burst(s.x,455,'#ff8a1f',8,3)}
   else if(s.kind==='rock'&&s.vy>0&&s.y>=448){s.life=0;burst(s.x,455,'#9aa1b3',10,3);shake=Math.max(shake,6)}}
  eshots=eshots.filter(s=>s.life>0&&s.y<H+60&&s.x>-100&&s.x<world+100);
- if(obj.type==='escape'&&frame>120)obj.cx+=Math.min(2.8,1.5+level*.015);
- if(obj.type==='time'&&--obj.t<=0){obj.t=1200;for(const q of PL)if(!q.dead){swapIn(q);say(p.x,p.y-30,'⏱ +20 с','#ff8a8a');hurt(true);swapOut(q)}swapIn(me)}
- if(obj.type==='survive'&&!obj.done){if(!obj.on&&PL.some(q=>!q.dead&&q.x>world-280)){obj.on=true;say(me.x,me.y-40,'🛡 20 секунд ұста!','#ffe06b')}
-  if(obj.on){obj.t--;if(obj.t%100===60)spawnWave();if(obj.t<=0){obj.done=true;for(const e of foes)if(e.sp&&e.alive){e.alive=false;burst(e.x,e.y,'#b56fe0',12,4)}snd(880,.2,'triangle',.06,0)}}}}
+ if(obj.type==='escape'&&frame>120)obj.cx+=Math.min(3.2,1.8+level*.02);
+ if(obj.type==='time'&&--obj.t<=0){{const mx=Math.min(world,...PL.filter(z=>!z.dead).map(z=>z.sx||z.x));obj.t=Math.ceil(Math.max(16,(world-mx)/222*1.9+6))*60}for(const q of PL)if(!q.dead){swapIn(q);say(p.x,p.y-30,'⏱ +уақыт','#ff8a8a');hurt(true);swapOut(q)}swapIn(me)}
+ if(obj.type==='survive'&&!obj.done){if(!obj.on&&PL.some(q=>!q.dead&&q.x>world-280)){obj.on=true;say(me.x,me.y-40,'🛡 30 секунд ұста!','#ffe06b')}
+  if(obj.on){obj.t--;if(obj.t%70===40)spawnWave();if(obj.t<=0){obj.done=true;for(const e of foes)if(e.sp&&e.alive){e.alive=false;burst(e.x,e.y,'#b56fe0',12,4)}snd(880,.2,'triangle',.06,0)}}}}
 function drawSwing(){if(fx<=0)return;g.save();g.globalAlpha=Math.min(.85,fx/12);const k=fxKind;
  if(k==='sword'||k==='axe'){g.strokeStyle=k==='axe'?'#ffb347':'#e8f4ff';g.lineWidth=k==='axe'?10:6;g.beginPath();g.arc(p.x+15,p.y+22,k==='axe'?44:54,p.face>0?-1.1:Math.PI-.5,p.face>0?.5:Math.PI+1.1);g.stroke()}
  else{g.fillStyle=k==='kick'?'#ff985d':'#fff2a6';g.beginPath();g.ellipse(p.x+(p.face>0?50:-20),p.y+24,k==='kick'?28:22,k==='kick'?12:18,0,0,7);g.fill()}g.restore()}
@@ -445,10 +475,11 @@ function draw(){
  g.fillStyle='#132440bb';g.fillRect(16,50,120,8);g.fillStyle=lock>0?'#e05a5a':'#6ec6ff';g.fillRect(16,50,120*energy/100,8);if(hero==='super'){g.fillStyle='#132440bb';g.fillRect(16,62,120,6);g.fillStyle='#ffd34d';g.fillRect(16,62,120*(p.fuel||0)/100,6)}
  if(boss&&boss.alive&&p.x>world-950){g.fillStyle='#132440cc';g.fillRect(W/2-150,34,300,12);g.fillStyle='#ff5a64';g.fillRect(W/2-150,34,300*boss.hp/boss.mh,12);g.fillStyle='#fff';g.font='bold 13px system-ui';g.textAlign='center';g.fillText('👹 '+BOSSES[boss.bk].n,W/2,64);g.textAlign='left'}
  if(!(boss&&boss.alive&&p.x>world-950)&&banner<=0){const lb=objLabel(),low=obj.type==='time'&&obj.t<900;g.font='bold 15px system-ui';const tw=g.measureText(lb).width+28;g.fillStyle=low&&frame%30<15?'#a01c1ccc':'#132440bb';g.beginPath();g.roundRect(W/2-tw/2,34,tw,26,12);g.fill();g.fillStyle='#fff';g.textAlign='center';g.fillText(lb,W/2,52);g.textAlign='left'}
+ if(resB&&resB.t>0){resB.t--;g.globalAlpha=Math.min(1,resB.t/30);const tx=`ДЕҢГЕЙ ${resB.l} ӨТТІ  ${starTxt(resB.s)}`;g.font='bold 18px system-ui';const tw=g.measureText(tx).width+30;g.fillStyle='#132440dd';g.beginPath();g.roundRect(W/2-tw/2,70,tw,32,14);g.fill();g.fillStyle='#ffd34d';g.textAlign='center';g.fillText(tx,W/2,92);g.textAlign='left';g.globalAlpha=1}
  if(banner>0){g.globalAlpha=Math.min(1,banner/40);g.textAlign='center';g.fillStyle='#0009';g.fillRect(0,196,W,150);g.fillStyle='#fff';g.font='900 44px system-ui';g.fillText(`ДЕҢГЕЙ ${level}`,W/2,255);g.fillStyle='#ffd34d';g.font='bold 20px system-ui';g.fillText(theme[0],W/2,284);g.fillStyle='#fff';g.font='bold 22px system-ui';g.fillText(obj.type==='boss'?'👹 '+BOSSES[boss.bk].n:'🎯 '+MN[obj.type],W/2,322);g.textAlign='left';g.globalAlpha=1}
  g.restore()}
-function showOv(title,msg,m){mode=m;$('#title').textContent=title;$('#message').textContent=msg;$('#pick').style.display=m==='pause'?'none':'';$('#start').textContent={menu:'Жаңа ойын',pause:'Жалғастыру',end:'Қайта ойнау'}[m];const k=$('#cont');const rl=save.run?save.run.level:best;k.style.display=m!=='pause'&&rl>1?'':'none';k.textContent=`${rl}-деңгейден жалғастыру`;$('#stats').textContent=statsLine();showCard('menuCard');ov.style.display='flex'}
-function finish(win){running=false;save.run=null;if(net.mode==='host'){netSend({t:'end',win,level,score});setTimeout(netClose,500)}if(win)save.wins++;persist();showOv(win?'100 ДЕҢГЕЙДІҢ БӘРІН ӨТТІҢ! 🏆':'Ойын аяқталды',win?`Керемет! ${score} ұпаймен Dastan2026 әлемін бағындырдың!`:`${level}-деңгейде тоқтадың. ${score} ұпай жинадың. Рекордың: ${best}-деңгей.`,'end')}
+function showOv(title,msg,m){mode=m;$('#title').textContent=title;$('#message').textContent=msg;$('#pick').style.display=m==='pause'?'none':'';$('#start').textContent={menu:'Жаңа ойын',pause:'Жалғастыру',end:'Қайта ойнау'}[m];$('#lvlBtn').style.display=m==='pause'?'none':'';const k=$('#cont');const rl=save.run?save.run.level:best;k.style.display=m!=='pause'&&rl>1?'':'none';k.textContent=`${rl}-деңгейден жалғастыру`;$('#stats').textContent=statsLine();showCard('menuCard');$('#exitBtn').textContent='Шығу';ov.style.display='flex'}
+function finish(win){running=false;save.run=null;if(net.mode==='host'){netSend({t:'end',win,level,score});setTimeout(netClose,500)}if(win)save.wins++;persist();showOv(win?'100 ДЕҢГЕЙДІҢ БӘРІН ӨТТІҢ! 🏆':'Ойын аяқталды',win?`Керемет! ${score} ұпаймен Dastan2026 әлемін бағындырдың! Жалпы рейтинг: ${starTxt(Math.max(1,Math.min(5,Math.round([...save.st].reduce((a,c)=>a+ +c,0)/100))))} (${[...save.st].reduce((a,c)=>a+ +c,0)}/500 ⭐)`:`${level}-деңгейде тоқтадың. ${score} ұпай жинадың. Рекордың: ${best}-деңгей.`,'end')}
 function setPause(v){if(!running||paused===v||net.mode!=='solo')return;paused=v;if(v)showOv('Үзіліс',`${level}-деңгей · ${score} ұпай`,'pause');else ov.style.display='none';last=performance.now()}
 function begin(from,run,coop){p=me;keys=LK;hero=$('#hero').value;save.hero=hero;save.useFace=$('#useFace').checked&&!!save.face;save.plays++;persist();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}keepAwake();level=from;score=run?run.score:0;ammo=run?run.ammo:own('ammo')*10;lives=run?run.lives:3+own('life');me.wp=save.weapon||'';me.bh=hero;me.fimg=save.useFace?faceImg:null;me.name=user?user.name:'';me.id=user?user.id|0:0;me.slot=0;me.dead=false;PL=[me];net.mode=coop?'host':'solo';$('#invBtn').style.display=coop?'':'none';net.room=me.id;fxq=[];makeLevel();swapOut(me);ov.style.display='none';running=true;paused=false;acc=0;last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);snd(500,.1,'triangle',.05,300)}
 function loop(t){if(!running)return;acc+=Math.min(.1,(t-last)/1000);last=t;if(!paused)while(acc>=FS){net.mode==='client'?clientTick():update();acc-=FS;if(!running)break}else acc=0;draw();raf=requestAnimationFrame(loop)}
@@ -470,7 +501,7 @@ const root=document.documentElement,coarse=matchMedia('(pointer:coarse)').matche
 if(coarse)root.classList.add('has-touch');addEventListener('touchstart',()=>root.classList.add('has-touch'),{once:true,passive:true});
 if(!root.requestFullscreen)$('#fsBtn').style.display='none';
 if(/iPhone|iPad|iPod/.test(navigator.userAgent)&&!navigator.standalone)$('#iosTip').style.display='';
-showOv('Dastan2026','100 деңгейлік шытырман оқиға! Тиын мен оқ жинап, жауларды жеңіп, әр 10-деңгейдегі бастықты жең.','menu');makeLevel();draw();
+showOv('Dastan2026','100 деңгейлік шытырман оқиға! Тиын мен оқ жинап, жауларды жеңіп, әр 10-деңгейдегі бастықты жық.','menu');makeLevel();draw();
 const fe=$('#faceEd'),fc=$('#faceCv'),fg=fc.getContext('2d');let fcol='#2b2b2b',fsize=5,ferase=false,fdraw=false,fprev=null;
 const fpos=e=>{const r=fc.getBoundingClientRect();return[(e.clientX-r.left)*128/r.width,(e.clientY-r.top)*128/r.height]};
 function stroke(a,b){fg.globalCompositeOperation=ferase?'destination-out':'source-over';fg.strokeStyle=fcol;fg.lineWidth=fsize;fg.lineCap=fg.lineJoin='round';fg.beginPath();fg.moveTo(a[0],a[1]);fg.lineTo(b[0]+.01,b[1]);fg.stroke()}
@@ -485,7 +516,7 @@ $('#faceBack').onclick=()=>showOv('Dastan2026','Кейіпкерді таңда 
 $('#faceSave').onclick=()=>{const o=document.createElement('canvas');o.width=o.height=64;const x=o.getContext('2d');x.fillStyle=$('#skin').value;x.fillRect(0,0,64,64);x.drawImage(fc,0,0,64,64);save.face=o.toDataURL('image/png');save.faceLayer=fc.toDataURL('image/png');save.skin=$('#skin').value;save.useFace=true;persist();loadFace();$('#useFace').checked=true;showOv('Dastan2026','Бетің сақталды! Енді кейіпкерің сенің бетіңмен ойнайды 🎉','menu')};
 $('#faceDel').onclick=()=>{save.face=save.faceLayer=null;save.useFace=false;persist();loadFace();$('#useFace').checked=false;showOv('Dastan2026','Бет алынып тасталды.','menu')};
 // ---- Дүкен
-function showCard(id){for(const c of['loginCard','menuCard','shopCard','faceEd','coopCard'])$('#'+c).style.display=c===id?'':'none'}
+function showCard(id){for(const c of['loginCard','menuCard','shopCard','faceEd','coopCard','levelsCard'])$('#'+c).style.display=c===id?'':'none'}
 function renderShop(){const box=$('#shopList');box.innerHTML='';$('#shopCoins').textContent=save.coins;
  for(const s of SHOP){const lv=own(s.id),done=lv>=s.max,price=s.p[lv],row=document.createElement('div');row.className='item';
   row.innerHTML='<div class="ico"></div><div class="txt"><b></b><small></small><span class="pips"></span></div>';
@@ -519,8 +550,26 @@ $('#authForm').onsubmit=async e=>{e.preventDefault();const err=$('#authErr');err
   enter(name,$('#uRem').checked)}
  else{const r=all[key],ok=r&&await hashPw(pw,r.salt,r.it)===r.hash;if(!ok){if(++fails>=5){lockUntil=Date.now()+30000;fails=0}err.textContent='Логин немесе құпиясөз қате';return}fails=0;enter(r.name,$('#uRem').checked)}
  $('#uPass').value=$('#uPass2').value=''};
+$('#exitBtn').onclick=()=>{if(mode==='pause'){running=false;paused=false;cancelAnimationFrame(raf);swapIn(me);persist();showOv('Dastan2026','Ойыннан шықтың. Прогресс сақталды.','menu')}else $('#outBtn').onclick()};
 $('#outBtn').onclick=()=>{persist();cloudPush(true);try{localStorage.removeItem(SKEY);sessionStorage.removeItem(SKEY)}catch(e){}user=null;save=defSave();best=1;loadFace();showLogin()};
 $('#fsBtn').onclick=()=>{try{const so=screen.orientation;if(document.fullscreenElement){document.exitFullscreen();so&&so.unlock&&so.unlock()}else{const r=document.documentElement.requestFullscreen();r&&r.then&&r.then(()=>so&&so.lock&&so.lock('landscape').catch(()=>{})).catch(()=>{})}}catch(e){}};
+// ---- Деңгей таңдау экраны және жұлдыз рейтингі
+const LV_IC={run:'🏁',keys:'🗝️',hunt:'⚔️',coins:'🟡',time:'⏱️',survive:'🛡️',escape:'🔥',boss:'👹'},LV_NM={run:'Мәреге жет',keys:'Кілттерді тап',hunt:'Жауларды жең',coins:'Тиын жина',time:'Уақытқа үлгер',survive:'Алаңды қорға',escape:'Жалыннан қаш'};
+const missionOf=L=>L%10===0?'boss':MIS[(L-1+((L-1)/7|0))%7],starTxt=n=>'★'.repeat(n)+'☆'.repeat(5-n);
+function setStar(L,s){if(L>=1&&L<=100&&s>+save.st[L-1])save.st=save.st.slice(0,L-1)+s+save.st.slice(L)}
+function rateLevel(){return Math.min(5,1+(lvs.hits===0?1:0)+(lvs.ct&&lvs.coins>=lvs.ct*.8?1:0)+(!lvs.ft||lvs.kills>=lvs.ft*.7?1:0)+(frame-lvs.t0<=lvs.par?1:0))}
+function renderLevels(){const box=$('#lvlGrid');box.innerHTML='';let tot=0;
+ for(let sec=0;sec<10;sec++){const h=document.createElement('h2');h.className='lvh';h.textContent=`${sec*10+1}–${sec*10+10} · ${BOSSES[sec].n} әлемі`;box.appendChild(h);
+  const grid=document.createElement('div');grid.className='lvgrid';if(best>sec*10&&best<=sec*10+10)grid.className+=' hascur';
+  for(let i=1;i<=10;i++){const L=sec*10+i,t=missionOf(L),open=L<=best,st=+save.st[L-1];tot+=st;
+   const b=document.createElement('button');b.className='lvl'+(open?'':' locked')+(L===best?' cur':'');b.disabled=!open;
+   b.innerHTML='<span class="n"></span><span class="lk"></span><span class="ic"></span><span class="tt"></span><span class="sr"></span>';
+   const q=s=>b.querySelector(s);q('.n').textContent=String(L).padStart(2,'0');q('.lk').textContent=open?'':'🔒';q('.ic').textContent=LV_IC[t];q('.tt').textContent=t==='boss'?BOSSES[sec].n:LV_NM[t];q('.sr').textContent=open&&st?starTxt(st):'';
+   b.onclick=()=>begin(L);grid.appendChild(b)}
+  box.appendChild(grid)}
+ $('#lvlTotal').textContent=`⭐ ${tot}/500`}
+$('#lvlBtn').onclick=()=>{renderLevels();showCard('levelsCard');const c=document.querySelector('.lvl.cur');if(c&&c.scrollIntoView)c.scrollIntoView({block:'center'})};
+$('#lvlBack').onclick=()=>showOv('Dastan2026','Кейіпкерді таңда да, ойынды баста!','menu');
 let pendingRoom=0;
 function openPending(){if(pendingRoom){$('#joinId').value=pendingRoom;pendingRoom=0;$('#coopBtn').onclick()}}
 // ---- ID жүйесі (1-10000) және бірге ойнау (WebRTC / PeerJS)
@@ -540,7 +589,7 @@ const r1=v=>Math.round(v*10)/10;
 function rosterList(){return PL.map(q=>({slot:q.slot,name:q.name,id:q.id,hero:q.bh,wp:q===me?(save.weapon||''):q.wp||'',ow:q===me?save.owned:q.owned||{},face:q===me?(save.useFace?save.face:null):q.fsrc||null}))}
 function loadFaceFor(q,src){if(!src||q.fsrc===src)return;q.fsrc=src;const im=new Image();im.onload=()=>{q.fimg=im};im.src=src}
 function snapshot(){const o=obj;return{t:'s',sc:score,sk:Math.round(shake),ob:{type:o.type,have:o.have,need:o.need,t:o.t,on:o.on,done:o.done,cx:r1(o.cx),n:o.n},
- pl:PL.map(q=>[q.slot,r1(q.x),r1(q.y),r1(q.vx),r1(q.vy),q.face,q.ground?1:0,q.inv|0,q.star|0,q.guard?1:0,q.lives,q.dead?1:0,q.ammo,q.energy|0,q.fx|0,['punch','kick','sword','axe'].indexOf(q.fxk),r1(q.anim),q.fuel|0]),
+ pl:PL.map(q=>[q.slot,r1(q.x),r1(q.y),r1(q.vx),r1(q.vy),q.face,q.ground?1:0,q.inv|0,q.star|0,q.guard?1:0,q.lives,q.dead?1:0,q.ammo,q.energy|0,q.fx|0,['punch','kick','sword','axe'].indexOf(q.fxk),r1(q.anim),q.fuel|0,q.gl?1:0]),
  fo:foes.slice(0,baseN).map(e=>[r1(e.x),r1(e.y),e.hp,e.alive?1:0,e.flash|0,e.v>0?1:e.v<0?-1:0,e.ph|0,e.al===undefined?1:r1(e.al),e.face||1,e.iv|0,e.air?1:0]),
  fn:foes.slice(baseN),ct:coins.map(a=>a.taken?1:0).join(''),pk:picks.map(a=>[r1(a.x),r1(a.y),a.t,a.id|0,a.taken?1:0]),
  pm:plats.map(q=>q.amp?r1(q.x):q.blk?(q.gone?2:q.used?1:0):0),es:eshots.map(s=>[r1(s.x),r1(s.y),s.r,s.col,s.kind,s.d|0,s.dir|0]),sh:shots.map(s=>[r1(s.x),r1(s.y),s.laser?1:s.arrow?2:s.fire?3:0,s.v<0?-1:1]),ev:fxq.splice(0,40)}}
@@ -566,15 +615,15 @@ async function joinRoom(){const err=$('#coopErr');err.textContent='';const id=pa
  try{await loadPeer()}catch(e){err.textContent='PeerJS жүктелмеді. Интернетті тексер.';return}
  let done=false;const peer=new globalThis.Peer();net.peer=peer;
  const fail=t=>{if(done)return;done=true;err.textContent=t;try{peer.destroy()}catch(x){}net.peer=null};
- setTimeout(()=>fail('Қосылу уақыты бітті.'),12000);
+ setTimeout(()=>fail('Қосылу уақыты бітті. ID дұрыс па, бөлме ашық па?'),12000);
  peer.on('error',e=>fail(e.type==='peer-unavailable'?'Бұл ID-мен ашық бөлме табылмады':'Желі қатесі: '+e.type));
  peer.on('open',()=>{const conn=peer.connect(PEERPFX+id,{serialization:'json',reliable:true});net.conn=conn;
   conn.on('open',()=>conn.send({t:'hello',name:user.name,id:user.id,hero:$('#hero').value,face:save.useFace?save.face:null,owned:save.owned,weapon:save.weapon||''}));
   conn.on('data',m=>onClientMsg(m,fail,()=>{done=true}));conn.on('close',clientLost);conn.on('error',clientLost)})}
 function applyRoster(list){const old=new Map(PL.map(q=>[q.slot,q]));PL=list.map(en=>{let q=en.slot===net.slot?me:old.get(en.slot);if(!q)q=newPlayer(en.slot,en);q.slot=en.slot;q.name=en.name;q.id=en.id;q.bh=en.hero;if(q!==me){q.wp=SHOP.some(s=>s.w&&s.id===en.wp)?en.wp:'';const o={};for(const s of SHOP)o[s.id]=Math.max(0,Math.min(s.max,((en.ow||{})[s.id])|0));q.owned=o}q.hero=level>=70?'super':en.hero;if(q!==me)loadFaceFor(q,en.face);return q})}
-function clientLevel(m){level=m.level;score=m.score|0;if(level>best){best=level;save.best=best;persist()}makeLevel();swapOut(me);net.ready=true;sync()}
+function clientLevel(m){level=m.level;score=m.score|0;if(m.rate){const rs=Math.max(1,Math.min(5,m.rate.s|0));setStar(m.rate.l|0,rs);resB={l:m.rate.l|0,s:rs,t:220}}if(level>best){best=level;save.best=best;persist()}makeLevel();swapOut(me);net.ready=true;sync()}
 function applySnap(m){if(!net.ready)return;score=m.sc;shake=Math.max(shake,m.sk|0);Object.assign(obj,m.ob);
- for(const a of m.pl){const q=PL.find(z=>z.slot===a[0]);if(!q)continue;if(q.tx===undefined||Math.abs(q.x-a[1])>200){q.x=a[1];q.y=a[2]}q.tx=a[1];q.ty=a[2];q.vx=a[3];q.vy=a[4];q.face=a[5];q.ground=!!a[6];q.inv=a[7];q.star=a[8];q.guard=!!a[9];q.lives=a[10];q.dead=!!a[11];q.ammo=a[12];q.energy=a[13];q.fx=a[14];q.fxk=['punch','kick','sword','axe'][a[15]]||'punch';q.anim=a[16];q.fuel=a[17]}
+ for(const a of m.pl){const q=PL.find(z=>z.slot===a[0]);if(!q)continue;if(q.tx===undefined||Math.abs(q.x-a[1])>200){q.x=a[1];q.y=a[2]}q.tx=a[1];q.ty=a[2];q.vx=a[3];q.vy=a[4];q.face=a[5];q.ground=!!a[6];q.inv=a[7];q.star=a[8];q.guard=!!a[9];q.lives=a[10];q.dead=!!a[11];q.ammo=a[12];q.energy=a[13];q.fx=a[14];q.fxk=['punch','kick','sword','axe'][a[15]]||'punch';q.anim=a[16];q.fuel=a[17];q.gl=!!a[18]}
  m.fo.forEach((a,i)=>{const e=foes[i];if(!e)return;if(e.tx===undefined||Math.abs(e.x-a[0])>150){e.x=a[0];e.y=a[1]}e.tx=a[0];e.ty=a[1];e.hp=a[2];e.alive=!!a[3];e.flash=a[4];if(a[5])e.v=a[5]*Math.max(.01,Math.abs(e.v||1));e.ph=a[6];e.al=a[7];e.face=a[8];e.iv=a[9];e.air=!!a[10]});
  foes.length=baseN;for(const f of m.fn)foes.push(f);
  m.ct.split('').forEach((c,i)=>{if(coins[i])coins[i].taken=c==='1'});
